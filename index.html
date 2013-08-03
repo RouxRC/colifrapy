@@ -1,0 +1,570 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Colifrapy by Yomguithereal</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Yomguithereal/colifrapy">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Yomguithereal/colifrapy/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Yomguithereal/colifrapy/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Colifrapy</h1>
+          <p>Python Command Line Framework</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Yomguithereal">Yomguithereal</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="colifrapy" class="anchor" href="#colifrapy"><span class="octicon octicon-link"></span></a>Colifrapy</h1>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p>Colifrapy is a <strong>Command Line Framework for Python</strong>.
+Its aim is to provide several tools to build robust and
+structured command line tools very easily.</p>
+
+<p>Its logic is very similar to a MVC framework and is therefore easy to use.</p>
+
+<h2>
+<a name="summary" class="anchor" href="#summary"><span class="octicon octicon-link"></span></a>Summary</h2>
+
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#philosophy">Philosophy</a></li>
+<li><a href="#concept">Concept</a></li>
+<li>
+<a href="#usage">Usage</a>
+
+<ol>
+<li><a href="#scaffolding">Scaffolding</a></li>
+<li><a href="#command-line-hub">Command Line Hub</a></li>
+<li><a href="#controller">Controller</a></li>
+<li><a href="#settings">Settings</a></li>
+<li><a href="#arguments">Arguments</a></li>
+<li><a href="#model">Model</a></li>
+<li><a href="#logger">Logger</a></li>
+<li><a href="#eye-candy">Eye Candy</a></li>
+<li><a href="#bonus">Bonus</a></li>
+</ol>
+</li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+<li><a href="#license">License</a></li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>It is recommanded to use colifrapy under a python virtualenv.</p>
+
+<p>Install it with pip (version up to 0.3.0):</p>
+
+<pre><code>pip install colifrapy
+</code></pre>
+
+<p>If you want to use the latest one which is still in development :</p>
+
+<pre><code>pip install git+https://github.com/Yomguithereal/colifrapy.git
+</code></pre>
+
+<h2>
+<a name="philosophy" class="anchor" href="#philosophy"><span class="octicon octicon-link"></span></a>Philosophy</h2>
+
+<p>As every framework, colifrapy aims at enable you to work immediately on critical and intersting parts of
+your code that will tackle the problems you need to solve instead of battling with petty
+things such as the console output, your settings and the arguments passed to your tool.</p>
+
+<p>However, colifrapy is not a tyrant and does not force you to go its way. As such, every part of colifrapy can
+be used on its own and you will remain free to code however you want to.</p>
+
+<h2>
+<a name="concept" class="anchor" href="#concept"><span class="octicon octicon-link"></span></a>Concept</h2>
+
+<p>When using colifrapy, your tool is called through a command line hub which acts more or less like a router and
+calls upon a controller that will use one or several models to perform the job.</p>
+
+<p>Your hub has therefore the task to load a yaml configuration file containing your command line
+arguments, name, version and even contextual settings if you need to.</p>
+
+<p>Once those settings are loaded, every part of your application (mainly models) will remain able to access critical
+utilities such as argv opts, settings and make use of colifrapy's logger to ouptut nicely to the console.</p>
+
+<p>So, schematically colifrapy is:</p>
+
+<pre><code>Settings --&gt; Command Line Hub --&gt; Controller --&gt; Model + Model + Model etc...
+</code></pre>
+
+<p>Every bit of colifrapy can be used as a standalone.</p>
+
+<pre><code>Logger (outputs to console)
+Settings (deals with your yml settings)
+Commander (deals with argv)
+</code></pre>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a name="scaffolding" class="anchor" href="#scaffolding"><span class="octicon octicon-link"></span></a>Scaffolding</h3>
+
+<p>Colifrapy is able to create a new blank project for you.</p>
+
+<div class="highlight"><pre>colifrapy new <span class="o">[</span>project<span class="o">]</span>
+
+<span class="c"># Options</span>
+<span class="c">#    -a/--author [name] : name of the project's author</span>
+</pre></div>
+
+<p>This will create the necessary files to start working immediatly. I.e. a command line hub, a base
+controller, an example model, a config file, a string file and other frequent files such as .gitignore and such.</p>
+
+<p>To test if the scaffolding has worked :</p>
+
+<div class="highlight"><pre><span class="nb">cd</span> <span class="o">[</span>project<span class="o">]</span>
+python <span class="o">[</span>project<span class="o">]</span>.py <span class="nb">test</span>
+</pre></div>
+
+<p>It should output a header displaying your project's title, some string outputs, and a short line telling you
+all is going to be fine.</p>
+
+<hr><h3>
+<a name="command-line-hub" class="anchor" href="#command-line-hub"><span class="octicon octicon-link"></span></a>Command Line Hub</h3>
+
+<p>A colifrapy project relies on a command line hub which extends Colifrapy base class and which must
+be called from the root of your project. The duty of this hub is just to launch your tool, analyze
+the arguments given to it and call upon the relevant controller methods.</p>
+
+<p>In fact, this hub can be compared to a basic router for web frameworks.</p>
+
+<p>This is the hub as it will be generated by the scaffolder :</p>
+
+<div class="highlight"><pre><span class="c"># Dependencies</span>
+<span class="c">#=============</span>
+<span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Colifrapy</span>
+<span class="kn">from</span> <span class="nn">model.controller</span> <span class="kn">import</span> <span class="n">Controller</span>
+
+<span class="c"># Hub</span>
+<span class="c">#======</span>
+<span class="k">class</span> <span class="nc">NameOfYourProject</span><span class="p">(</span><span class="n">Colifrapy</span><span class="p">):</span>
+
+    <span class="c"># From this hub, you can access several things :</span>
+    <span class="c">#    self.settings (Settings Instance)</span>
+    <span class="c">#    self.log (Logger Instance)</span>
+    <span class="c">#    self.opts (Options passed to your hub)</span>
+    <span class="c">#    self.controller (Your Controller)</span>
+
+    <span class="k">def</span> <span class="nf">launch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># Welcoming visitors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s">'main:title'</span><span class="p">)</span>
+
+        <span class="c"># Calling upon the controller</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+
+<span class="c"># Launching</span>
+<span class="c">#===========</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="c"># By default, the hub will load config/settings.yml</span>
+    <span class="n">hub</span> <span class="o">=</span> <span class="n">NameOfYourProject</span><span class="p">(</span><span class="n">Controller</span><span class="p">,</span> <span class="p">[</span><span class="n">optional</span><span class="p">]</span><span class="s">'path/to/your/settings.yml'</span><span class="p">)</span>
+    <span class="n">hub</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+
+<hr><h3>
+<a name="controller" class="anchor" href="#controller"><span class="octicon octicon-link"></span></a>Controller</h3>
+
+<p>The controller is a class that will call upon your models to perform actions. It is in fact a colifrapy Model instance, but this must not disturb you.</p>
+
+<p>The controller is totally optional and just illustrate a
+way to organize your code.
+If you don't want to follow this logic, just don't pass a controller to your hub instance.</p>
+
+<p>Example of controller as generated by the scaffolder:</p>
+
+<div class="highlight"><pre><span class="c"># Dependencies</span>
+<span class="c">#=============</span>
+<span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">example_model</span> <span class="kn">import</span> <span class="n">ExampleModel</span>
+
+<span class="c"># Main Class</span>
+<span class="c">#=============</span>
+<span class="k">class</span> <span class="nc">Controller</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="c"># Properties</span>
+    <span class="n">example_model</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">example_model</span> <span class="o">=</span> <span class="n">ExampleModel</span><span class="p">()</span>
+
+    <span class="c"># Example of controller action</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'main:controller'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">example_model</span><span class="o">.</span><span class="n">hello</span><span class="p">()</span>
+</pre></div>
+
+<hr><h3>
+<a name="settings" class="anchor" href="#settings"><span class="octicon octicon-link"></span></a>Settings</h3>
+
+<p>The Settings class is the first class loaded by colifrapy to perform its magic. It will parse your settings.yml file and configure your logger, arguments and every other configuration you want for your application.</p>
+
+<p>config/settings.yml file:</p>
+
+<div class="highlight"><pre><span class="c1"># Basic Informations</span>
+<span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">'[project-name]</span><span class="nv"> </span><span class="s">0.1.0'</span>
+<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="s">'Description</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">program.'</span>
+<span class="l-Scalar-Plain">arguments</span><span class="p-Indicator">:</span>
+<span class="p-Indicator">-</span> <span class="p-Indicator">[</span> <span class="p-Indicator">[</span><span class="s">'-t'</span><span class="p-Indicator">,</span> <span class="s">'--test'</span><span class="p-Indicator">],</span> <span class="p-Indicator">{</span><span class="s">'help'</span> <span class="p-Indicator">:</span> <span class="s">'Test'</span><span class="p-Indicator">,</span> <span class="s">'type'</span> <span class="p-Indicator">:</span> <span class="s">'int'</span><span class="p-Indicator">}</span> <span class="p-Indicator">]</span>
+<span class="p-Indicator">-</span> <span class="p-Indicator">[</span> <span class="p-Indicator">[</span><span class="s">'positionnal'</span><span class="p-Indicator">]</span> <span class="p-Indicator">]</span>
+
+<span class="c1"># Logger Settings</span>
+<span class="l-Scalar-Plain">logger</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">strings</span><span class="p-Indicator">:</span> <span class="s">'config/strings.yml'</span>
+    <span class="l-Scalar-Plain">flavor</span><span class="p-Indicator">:</span> <span class="s">'default'</span>
+    <span class="l-Scalar-Plain">title_default</span><span class="p-Indicator">:</span> <span class="s">'default'</span>
+    <span class="c1"># Delete the path line not to write the log to a file</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="s">'logs'</span>
+    <span class="l-Scalar-Plain">threshold</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">'DEBUG'</span><span class="p-Indicator">,</span> <span class="s">'ERROR'</span><span class="p-Indicator">,</span> <span class="s">'INFO'</span><span class="p-Indicator">,</span> <span class="s">'WARNING'</span><span class="p-Indicator">,</span> <span class="s">'VERBOSE'</span><span class="p-Indicator">]</span>
+
+<span class="c1"># Generic Settings needed by your program</span>
+<span class="l-Scalar-Plain">settings</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">hello</span><span class="p-Indicator">:</span> <span class="s">'world'</span>
+    <span class="l-Scalar-Plain">bonjour</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3.4</span>
+    <span class="l-Scalar-Plain">hash</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span><span class="s">'test'</span> <span class="p-Indicator">:</span> <span class="nv">2</span><span class="p-Indicator">}</span>
+</pre></div>
+
+<p>The settings are loaded automatically by colifrapy but you still can use its logic elsewhere if
+you need it.</p>
+
+<p>An example of external use :</p>
+
+<div class="highlight"><pre><span class="c"># Importing</span>
+<span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="c"># Instanciating settings</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+
+<span class="c"># Let the path blank to fetch 'config/settings.yml' by default</span>
+<span class="n">settings</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">'path/to/your/settings.yml'</span><span class="p">)</span>
+
+<span class="c"># Now use it</span>
+<span class="k">print</span> <span class="n">settings</span><span class="o">.</span><span class="n">hello</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s">'world'</span>
+
+<span class="k">print</span> <span class="n">settings</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="s">'test'</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">2</span>
+</pre></div>
+
+<p>The Settings class is a singleton. You can therefore use it everywhere without having to reload the data.</p>
+
+<hr><h3>
+<a name="arguments" class="anchor" href="#arguments"><span class="octicon octicon-link"></span></a>Arguments</h3>
+
+<p>Arguments are to be defined as for the python <a href="http://docs.python.org/dev/library/argparse.html" title="ArgParser">ArgParser</a> class. In fact,
+the colifrapy Commander class extends the ArgParser one, so, if you need complicated things not handled by colifrapy, just use the Commander class like the ArgParser one.</p>
+
+<p>Examples of argument declaration:</p>
+
+<div class="highlight"><pre><span class="l-Scalar-Plain">arguments</span><span class="p-Indicator">:</span>
+<span class="p-Indicator">-</span> <span class="p-Indicator">[</span> <span class="p-Indicator">[</span><span class="s">'-t'</span><span class="p-Indicator">,</span> <span class="s">'--test'</span><span class="p-Indicator">],</span> <span class="p-Indicator">{</span><span class="s">'help'</span> <span class="p-Indicator">:</span> <span class="s">'Test'</span><span class="p-Indicator">,</span> <span class="s">'type'</span> <span class="p-Indicator">:</span> <span class="s">'int'</span><span class="p-Indicator">,</span> <span class="s">'default'</span> <span class="p-Indicator">:</span> <span class="nv">5</span><span class="p-Indicator">}</span> <span class="p-Indicator">]</span>
+<span class="p-Indicator">-</span> <span class="p-Indicator">[</span> <span class="p-Indicator">[</span><span class="s">'-b'</span><span class="p-Indicator">,</span> <span class="s">'--blue'</span><span class="p-Indicator">],</span> <span class="p-Indicator">{</span><span class="s">'help'</span> <span class="p-Indicator">:</span> <span class="s">'Blue</span><span class="nv"> </span><span class="s">option'</span><span class="p-Indicator">,</span> <span class="s">'type'</span> <span class="p-Indicator">:</span> <span class="s">'int'</span><span class="p-Indicator">,</span> <span class="s">'required'</span> <span class="p-Indicator">:</span> <span class="s">'True'</span><span class="p-Indicator">}</span> <span class="p-Indicator">]</span>
+<span class="p-Indicator">-</span> <span class="p-Indicator">[</span> <span class="p-Indicator">[</span><span class="s">'some_positionnal_argument'</span><span class="p-Indicator">]</span> <span class="p-Indicator">]</span>
+</pre></div>
+
+<p>Once the settings are loaded, you can access your options through:</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Commander</span>
+<span class="n">command</span> <span class="o">=</span> <span class="n">Commander</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="n">command</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">test</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span>
+
+<span class="c"># Or from a hub/model</span>
+<span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">test</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span>
+</pre></div>
+
+<p>As for the Settings class, the Commander class is a singleton and its state won't change if you load it elsewhere.</p>
+
+<p>In the command hub and in your models, you can access the options passed to your commander through
+self.opts . However, even if those are accessible in models for commodity, only the main hub should use them and one should restrain their usage in models.</p>
+
+<hr><h3>
+<a name="model" class="anchor" href="#model"><span class="octicon octicon-link"></span></a>Model</h3>
+
+<p>Models are the bulk of Colifrapy. You can extend them to acces your settings and commands easily.</p>
+
+<p>An example model is generated for you by the Scaffolder when you create a new project.</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">hello</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">MyModel</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s">'world'</span>
+</pre></div>
+
+<p>Reserved attributes names are:</p>
+
+<pre><code>log (access to the logger described right after)
+opts (access to the command line options)
+settings (access to the program's settings)
+</code></pre>
+
+<hr><h3>
+<a name="logger-and-strings" class="anchor" href="#logger-and-strings"><span class="octicon octicon-link"></span></a>Logger and strings</h3>
+
+<h4>
+<a name="basic" class="anchor" href="#basic"><span class="octicon octicon-link"></span></a>Basic</h4>
+
+<p>The logger is the outputting class of colifrapy. It should be loaded with some strings by the settings.
+If no strings are given, the logger will just output normally the argument string you give to it.</p>
+
+<h4>
+<a name="levels" class="anchor" href="#levels"><span class="octicon octicon-link"></span></a>Levels</h4>
+
+<p>The logger accepts five levels :</p>
+
+<pre><code>INFO (green output)
+VERBOSE (cyan output)
+DEBUG (blue output)
+WARNING (yellow ouput)
+ERROR (red output) --&gt; will throw an exception for you to catch or not
+</code></pre>
+
+<p>By default, if no level is specified for a message, DEBUG will always be taken.</p>
+
+<h4>
+<a name="strings" class="anchor" href="#strings"><span class="octicon octicon-link"></span></a>Strings</h4>
+
+<p>Strings are externalized to enable you to quickly modify them if
+needed, or even translate them easily.</p>
+
+<p>The string format used is <a href="http://mustache.github.io/">Mustache</a>, so variables
+come likewise : {{some_variable}}</p>
+
+<p>Strings given must follow this yaml layout:</p>
+
+<div class="highlight"><pre><span class="l-Scalar-Plain">main</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">process</span><span class="p-Indicator">:</span>
+        <span class="c1"># String with a variable contained within the mustaches</span>
+        <span class="l-Scalar-Plain">start</span><span class="p-Indicator">:</span> <span class="s">'Starting</span><span class="nv"> </span><span class="s">corpus</span><span class="nv"> </span><span class="s">analysis</span><span class="nv"> </span><span class="s">(path</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">{{path}})//INFO'</span>
+        <span class="c1"># Simply write two slashes at the end to specify the level of the message</span>
+        <span class="l-Scalar-Plain">end</span><span class="p-Indicator">:</span> <span class="s">'Exiting//WARNING'</span>
+        <span class="l-Scalar-Plain">test_line_break</span><span class="p-Indicator">:</span> <span class="s">'\nBonjour'</span>
+    <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span> <span class="s">'Colifrapy'</span>
+<span class="l-Scalar-Plain">other_string_category</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span> <span class="s">'Hello</span><span class="nv"> </span><span class="s">everyone//INFO'</span>
+    <span class="l-Scalar-Plain">you</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">can</span><span class="p-Indicator">:</span>
+            <span class="l-Scalar-Plain">make</span><span class="p-Indicator">:</span> <span class="s">'any</span><span class="nv"> </span><span class="s">levels</span><span class="nv"> </span><span class="s">that</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">want'</span>
+            <span class="l-Scalar-Plain">so</span><span class="p-Indicator">:</span> <span class="s">'you</span><span class="nv"> </span><span class="s">can</span><span class="nv"> </span><span class="s">organize</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">strings</span><span class="nv"> </span><span class="s">however</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">need.'</span>
+</pre></div>
+
+<h4>
+<a name="usage-1" class="anchor" href="#usage-1"><span class="octicon octicon-link"></span></a>Usage</h4>
+
+<p>This is how you would use the logger in a colifrapy model:</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># Main method</span>
+        <span class="c">#------------</span>
+
+        <span class="c"># Outputting a message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'main:process:end'</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'[WARNING] :: Exiting'</span>
+
+        <span class="c"># Overriding the message level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'main:process:end'</span><span class="p">,</span> <span class="s">'INFO'</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'[INFO] :: Exiting'</span>
+
+        <span class="c"># Passing variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'main:protocol:start'</span><span class="p">,</span> <span class="p">{</span><span class="s">'path'</span> <span class="p">:</span> <span class="s">'test'</span><span class="p">})</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'[INFO] :: Starting corpus analysis (path : test)'</span>
+
+        <span class="c"># When yml file is not specified or if message does not match</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'Test string'</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s">'DEBUG'</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">DEBUG</span><span class="p">]</span> <span class="p">::</span> <span class="n">Test</span> <span class="n">string</span>
+
+        <span class="c"># Named arguments of write</span>
+        <span class="c"># variables --&gt; hash</span>
+        <span class="c"># level --&gt; log level</span>
+
+        <span class="c"># Helper methods</span>
+        <span class="c">#---------------</span>
+
+        <span class="c"># Printing a header (yellow color by default)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="s">'main:title'</span><span class="p">,</span> <span class="p">[</span><span class="n">optional</span><span class="p">]</span><span class="n">color</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="n">Colifrapy</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="o">---------</span>
+
+        <span class="c"># Asking for confirmation (purple color)</span>
+        <span class="c"># 'y' will be taken by default in arg 2</span>
+        <span class="c"># will return True for y and False for n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s">'Are you sure you want to continue?'</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'Are you sure you want to continue? (Y/n)'</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s">'Are you sure you want to continue?'</span><span class="p">,</span> <span class="s">'n'</span><span class="p">)</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'Are you sure you want to continue? (y/N)'</span>
+
+        <span class="c"># Write methods shorteners</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">verbose</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+
+<h4>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h4>
+
+<p>You can pass some options to your logger within the settings.yml file.</p>
+
+<p>Example:</p>
+
+<div class="highlight"><pre><span class="c1"># Logger settings</span>
+<span class="l-Scalar-Plain">logger</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">strings</span><span class="p-Indicator">:</span> <span class="s">'path/to/your/strings.yml'</span>
+
+    <span class="c1"># optional, discard the line not to log to a file</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="s">'path/where/to/log/'</span>
+
+    <span class="c1"># optional, use it to specify your logger threshold</span>
+    <span class="c1"># ERROR will always be kept whatsoever for obvious reasons, even if you drop it</span>
+    <span class="l-Scalar-Plain">log_threshold</span> <span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">'DEBUG'</span><span class="p-Indicator">,</span> <span class="s">'ERROR'</span><span class="p-Indicator">]</span>
+
+    <span class="c1"># optional (default, False), whether you want your errors to raise exceptions</span>
+    <span class="l-Scalar-Plain">exceptions</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">False</span>
+
+    <span class="c1"># flavors (see Eyecandy) you can drop those lines if you want default</span>
+    <span class="l-Scalar-Plain">flavor</span><span class="p-Indicator">:</span> <span class="s">'default'</span>
+    <span class="l-Scalar-Plain">title_flavor</span><span class="p-Indicator">:</span> <span class="s">'default'</span>
+</pre></div>
+
+<h4>
+<a name="standalone-usage" class="anchor" href="#standalone-usage"><span class="octicon octicon-link"></span></a>Standalone Usage</h4>
+
+<p>The Logger is also a singleton, you can use it as a standalone, if you need to :</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+<span class="c"># If you haven't configured it before in your code and you use it outside colifrapy</span>
+<span class="c"># Pass kwargs to it corresponding to the logger options in settings.yml</span>
+<span class="n">log</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">'test'</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="n">DEBUG</span><span class="p">]</span> <span class="p">::</span> <span class="n">test</span>
+</pre></div>
+
+<hr><h3>
+<a name="eye-candy" class="anchor" href="#eye-candy"><span class="octicon octicon-link"></span></a>Eye Candy</h3>
+
+<p>Colifrapy comes with visual alternatives (two for the moment, but more will come). They are called
+'flavors' and can be set in the Logger's settings.</p>
+
+<h4>
+<a name="title-flavors" class="anchor" href="#title-flavors"><span class="octicon octicon-link"></span></a>Title Flavors:</h4>
+
+<h5>
+<a name="default" class="anchor" href="#default"><span class="octicon octicon-link"></span></a>default</h5>
+
+<pre><code>Title
+-----
+</code></pre>
+
+<h5>
+<a name="heavy" class="anchor" href="#heavy"><span class="octicon octicon-link"></span></a>heavy</h5>
+
+<pre><code>#########
+# Title #
+#########
+</code></pre>
+
+<h4>
+<a name="logger-flavors" class="anchor" href="#logger-flavors"><span class="octicon octicon-link"></span></a>Logger Flavors:</h4>
+
+<h5>
+<a name="default-1" class="anchor" href="#default-1"><span class="octicon octicon-link"></span></a>default</h5>
+
+<pre><code>[DEBUG] :: text
+</code></pre>
+
+<h5>
+<a name="flat" class="anchor" href="#flat"><span class="octicon octicon-link"></span></a>flat</h5>
+
+<pre><code>debug : text
+</code></pre>
+
+<hr><h3>
+<a name="bonus" class="anchor" href="#bonus"><span class="octicon octicon-link"></span></a>Bonus</h3>
+
+<p>Colifrapy also gives access to a colorization function, a custom exception class and a basic singleton decorator if needed.</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">colifrapy.tools.colorize</span> <span class="kn">import</span> <span class="n">colorize</span>
+<span class="k">print</span> <span class="n">colorize</span><span class="p">(</span><span class="s">'hello'</span><span class="p">,</span> <span class="s">'blue'</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">colifrapy.tools.decorators</span> <span class="kn">import</span> <span class="n">singleton</span>
+
+<span class="nd">@singleton</span>
+<span class="k">class</span> <span class="nc">MySingleton</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="c"># Custom Exception Carrying data</span>
+<span class="kn">from</span> <span class="nn">colifrapy</span> <span class="kn">import</span> <span class="n">DataException</span>
+<span class="k">raise</span> <span class="n">DataException</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>My project <a href="https://github.com/Yomguithereal/furuikeya">furuikeya</a> is a good example of the usage
+of colifrapy since colifrapy was originally designed to help me doing it.</p>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<pre><code>pyyaml
+pystache
+</code></pre>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Colifrapy is under a MIT license.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
