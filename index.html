@@ -336,7 +336,7 @@ settings (access to the program's settings)
 </code></pre>
 
 <hr><h3>
-<a name="logger-and-strings" class="anchor" href="#logger-and-strings"><span class="octicon octicon-link"></span></a>Logger and strings</h3>
+<a name="logger" class="anchor" href="#logger"><span class="octicon octicon-link"></span></a>Logger</h3>
 
 <h4>
 <a name="basic" class="anchor" href="#basic"><span class="octicon octicon-link"></span></a>Basic</h4>
@@ -412,7 +412,7 @@ come likewise : {{some_variable}}</p>
 
         <span class="c"># When yml file is not specified or if message does not match</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'Test string'</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s">'DEBUG'</span><span class="p">)</span>
-        <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">DEBUG</span><span class="p">]</span> <span class="p">::</span> <span class="n">Test</span> <span class="n">string</span>
+        <span class="o">&gt;&gt;&gt;</span> <span class="s">'[DEBUG] :: Test string'</span>
 
         <span class="c"># Named arguments of write</span>
         <span class="c"># variables --&gt; hash</span>
